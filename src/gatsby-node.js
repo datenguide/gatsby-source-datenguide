@@ -1,22 +1,22 @@
 const axios = require(`axios`)
 const crypto = require(`crypto`)
 
-const get = query =>
+const get = (url, query) =>
   axios.get(
-    `http://127.0.0.1:5000/\?query\=${encodeURIComponent(query)}`
+    `${url}${encodeURIComponent(query)}`
   )
 
 exports.sourceNodes = async ({
   boundActionCreators,
   getNode,
   hasNodeChanged,
-}) => {
+}, pluginOptions) => {
   const { createNode } = boundActionCreators
+  const { queryUrl } = pluginOptions
 
   // Do the initial fetch:
-
   console.time(` --> fetch Datenguide data`)
-  const result = await get(`
+  const result = await get(queryUrl, `
 {
   districts
 }
