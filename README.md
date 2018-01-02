@@ -20,6 +20,6 @@ You can query nodes created from Datenguide like the following:
 
 ```graphql
 query StoriesQuery {
-  allDistricts
+  allDistrict
 }
 ```
