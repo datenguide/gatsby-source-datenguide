@@ -11,7 +11,14 @@ the [Datenguide API](https://github.com/datenguide/datenguide-backend)
 
 ```javascript
 // In your gatsby-config.js
-plugins: [`gatsby-source-datenguide`];
+plugins: [
+  {
+    resolve: 'gatsby-source-datenguide',
+    options: {
+      queryUrl: 'http://127.0.0.1:5000/\?query\=',
+    }
+  }
+];
 ```
 
 ## How to query
