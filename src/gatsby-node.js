@@ -1,10 +1,22 @@
 const axios = require(`axios`)
 const crypto = require(`crypto`)
 
+const rootQuery = `
+{
+  districts
+}`
+
+const detailsQuery = id => `
+{
+  district(id: "${id}") {
+    area
+    munis
+    name
+  }
+}`
+
 const get = (url, query) =>
-  axios.get(
-    `${url}${encodeURIComponent(query)}`
-  )
+  axios.get(`${url}${encodeURIComponent(query)}`)
 
 exports.sourceNodes = async ({
   boundActionCreators,
@@ -14,31 +26,40 @@ exports.sourceNodes = async ({
   const { createNode } = boundActionCreators
   const { queryUrl } = pluginOptions
 
-  // Do the initial fetch:
   console.time(` --> fetch Datenguide data`)
-  const result = await get(queryUrl, `
-{
-  districts
-}
-  `)
-  console.timeEnd(` --> fetch Datenguide data`)
 
-  // Create district nodes:
+  // Fetch district identifiers:
+  const ids = await get(queryUrl, rootQuery)
+  const { districts } = ids.data.data
 
-  result.data.data.districts.forEach((id) => {
+  // Recursively fetch district nodes:
+  // (async fetching is currently not properly supported by the API)
+  const getDetails = async (i) => {
+    const details = await get(queryUrl, detailsQuery(districts[i]))
+    const { district } = details.data.data
+    
     createNode({
-      id,
+      ...district,
+      id: districts[i],
       parent: null,
       children: [],
       internal: {
-        type: `DgDistrict`,
+        type: `District`,
         contentDigest: crypto
           .createHash(`md5`)
-          .update(JSON.stringify(id))
+          .update(JSON.stringify(district))
           .digest(`hex`),
       }
     })
-  })
+
+    if (++i < districts.length) {
+      return getDetails(i)
+    }
+  }
+  
+  await getDetails(0)
+
+  console.timeEnd(` --> fetch Datenguide data`)
 
   return
 }
