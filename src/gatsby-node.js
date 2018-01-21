@@ -51,9 +51,6 @@ exports.sourceNodes = async ({
   const { districts } = result.data.data
 
   districts.forEach(district => {
-
-    console.log(district)
-
     createNode({
       ...district,
       parent: null,
