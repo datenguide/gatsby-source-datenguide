@@ -8,8 +8,11 @@ const defaultQuery = `
     name
     name_ext
     slug
-    lat
-    lon
+    geo {
+      lat
+      lon
+      bbox
+    }
     flc006
     bevstd {
       gesm
