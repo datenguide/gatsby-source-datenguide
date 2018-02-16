@@ -8,10 +8,16 @@ const defaultQuery = `
     name
     name_ext
     slug
-    area
-    pop {
-      m
-      w
+    geo {
+      lat
+      lon
+      bbox
+    }
+    flc006
+    bevstd {
+      gesm
+      gesw
+      t
     }
     Schulstatistik {
       Gymnasien {
@@ -19,13 +25,6 @@ const defaultQuery = `
           BILKL2 {
             JGSTUFE11
             JGSTUFE7
-          }
-          GES {
-            I
-            M
-          }
-          NAT {
-            NATA
           }
         }
       }
