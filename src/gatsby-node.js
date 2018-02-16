@@ -1,37 +1,6 @@
 const axios = require(`axios`)
 const crypto = require(`crypto`)
 
-const defaultQuery = `
-{
-  districts {
-    id
-    name
-    name_ext
-    slug
-    geo {
-      lat
-      lon
-      bbox
-    }
-    flc006
-    bevstd {
-      gesm
-      gesw
-      t
-    }
-    Schulstatistik {
-      Gymnasien {
-        BIL003 {
-          BILKL2 {
-            JGSTUFE11
-            JGSTUFE7
-          }
-        }
-      }
-    }
-  }
-}`
-
 const get = (url, query) =>
   axios.get(`${url}${encodeURIComponent(query)}`)
 
@@ -41,9 +10,13 @@ exports.sourceNodes = async ({
   hasNodeChanged,
 }, pluginOptions) => {
   const { createNode } = boundActionCreators
-  const { queryUrl } = pluginOptions
+  const { queryUrl, obtainQueryUrl } = pluginOptions
 
   console.time(` --> fetch Datenguide data`)
+
+  // Fetch full query as string:
+  const defaultQueryResult = await axios.get(obtainQueryUrl)
+  const defaultQuery = defaultQueryResult.data
 
   // Fetch district identifiers:
   const result = await get(queryUrl, defaultQuery)
