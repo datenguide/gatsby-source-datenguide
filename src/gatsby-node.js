@@ -18,20 +18,20 @@ exports.sourceNodes = async ({
   const defaultQueryResult = await axios.get(obtainQueryUrl)
   const defaultQuery = defaultQueryResult.data
 
-  // Fetch district identifiers:
+  // Fetch region identifiers:
   const result = await get(queryUrl, defaultQuery)
-  const { districts } = result.data.data
+  const { regions } = result.data.data
 
-  districts.forEach(district => {
+  regions.forEach(region => {
     createNode({
-      ...district,
+      ...region,
       parent: null,
       children: [],
       internal: {
-        type: `District`,
+        type: `Region`,
         contentDigest: crypto
           .createHash(`md5`)
-          .update(JSON.stringify(district))
+          .update(JSON.stringify(region))
           .digest(`hex`),
       }
     })
