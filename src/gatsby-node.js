@@ -1,14 +1,12 @@
 const axios = require(`axios`)
 const crypto = require(`crypto`)
 
-const get = (url, query) =>
-  axios.get(`${url}${encodeURIComponent(query)}`)
+const get = (url, query) => axios.get(`${url}${encodeURIComponent(query)}`)
 
-exports.sourceNodes = async ({
-  boundActionCreators,
-  getNode,
-  hasNodeChanged,
-}, pluginOptions) => {
+exports.sourceNodes = async (
+  { boundActionCreators, getNode, hasNodeChanged },
+  pluginOptions
+) => {
   const { createNode } = boundActionCreators
   const { queryUrl, obtainQueryUrl } = pluginOptions
 
@@ -32,7 +30,7 @@ exports.sourceNodes = async ({
         contentDigest: crypto
           .createHash(`md5`)
           .update(JSON.stringify(region))
-          .digest(`hex`),
+          .digest(`hex`)
       }
     })
   })
