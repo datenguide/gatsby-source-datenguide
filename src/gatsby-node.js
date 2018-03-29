@@ -8,16 +8,12 @@ exports.sourceNodes = async (
   pluginOptions
 ) => {
   const { createNode } = boundActionCreators
-  const { queryUrl, obtainQueryUrl } = pluginOptions
+  const { queryUrl, query } = pluginOptions
 
   console.time(` --> fetch Datenguide data`)
 
-  // Fetch full query as string:
-  const defaultQueryResult = await axios.get(obtainQueryUrl)
-  const defaultQuery = defaultQueryResult.data
-
   // Fetch region identifiers:
-  const result = await get(queryUrl, defaultQuery)
+  const result = await get(queryUrl, query)
   const { regions } = result.data.data
 
   regions.forEach(region => {
