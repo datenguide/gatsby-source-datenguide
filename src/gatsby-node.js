@@ -1,8 +1,6 @@
 const axios = require(`axios`)
 const crypto = require(`crypto`)
 
-const get = (url, query) => axios.get(`${url}${encodeURIComponent(query)}`)
-
 exports.sourceNodes = async (
   { boundActionCreators, getNode, hasNodeChanged },
   pluginOptions
@@ -13,7 +11,7 @@ exports.sourceNodes = async (
   console.time(` --> fetch Datenguide data`)
 
   // Fetch region identifiers:
-  const result = await get(queryUrl, query)
+  const result = await axios.post(queryUrl, { query })
   const { regions } = result.data.data
 
   regions.forEach(region => {
